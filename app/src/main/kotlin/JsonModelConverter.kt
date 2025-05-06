@@ -17,7 +17,8 @@ object JsonModelConverter {
                 if (obj.keys.all { it is String }) {
                     JsonObject(LinkedHashMap(obj.mapKeys { it.key as String }.mapValues { toJsonValue(it.value) }))
                 } else {
-                    throw IllegalArgumentException("Map keys must be Strings")
+                    throw IllegalArgumentException("Unsupported type: ${obj::class}")
+
                 }
             }
             is Enum<*> -> JsonString(obj.name)
