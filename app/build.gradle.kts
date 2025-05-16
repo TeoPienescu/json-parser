@@ -11,8 +11,15 @@ repositories {
 }
 
 dependencies {
-    testImplementation(kotlin("test"))
     implementation(kotlin("reflect"))
+
+    // Testes
+    testImplementation(kotlin("test"))
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.0")
+
+    // OkHttp para testes
+    testImplementation("com.squareup.okhttp3:okhttp:4.12.0")
 }
 
 tasks.test {
