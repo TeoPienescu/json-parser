@@ -1,0 +1,53 @@
+@startuml
+interface Traversable {
+    +accept(visitor: (JsonValue) -> Unit)
+}
+
+abstract class JsonValue {
+    +serialize(): String
+}
+
+class JsonNull {
+    +serialize(): String
+}
+
+class JsonBoolean {
+    -value: Boolean
+    +serialize(): String
+}
+
+class JsonNumber {
+    -value: Number
+    +serialize(): String
+}
+
+class JsonString {
+    -value: String
+    +serialize(): String
+}
+
+class JsonArray {
+    -elements: List<JsonValue>
+    +serialize(): String
+    +filter(predicate: (JsonValue) -> Boolean): JsonArray
+    +map(transform: (JsonValue) -> JsonValue): JsonArray
+    +accept(visitor: (JsonValue) -> Unit)
+}
+
+class JsonObject {
+    -properties: Map<String, JsonValue>
+    +serialize(): String
+    +filter(predicate: (Map.Entry<String, JsonValue>) -> Boolean): JsonObject
+    +accept(visitor: (JsonValue) -> Unit)
+}
+
+JsonValue <|-- JsonNull
+JsonValue <|-- JsonBoolean
+JsonValue <|-- JsonNumber
+JsonValue <|-- JsonString
+JsonValue <|-- JsonArray
+JsonValue <|-- JsonObject
+
+JsonArray ..|> Traversable
+JsonObject ..|> Traversable
+@enduml

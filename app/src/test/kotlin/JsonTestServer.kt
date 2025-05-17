@@ -1,6 +1,6 @@
 package model
 
-import Controller
+import getJson.Controller
 import getJson.GetJson
 import okhttp3.OkHttpClient
 import okhttp3.Request
