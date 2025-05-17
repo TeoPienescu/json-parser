@@ -9,7 +9,7 @@ import kotlin.reflect.full.findAnnotation
 
 class GetJson(vararg controllers: KClass<*>) {
     private val routes = mutableMapOf<String, Handler>()
-
+    private var server: HttpServer? = null
     init {
         for (controllerKClass in controllers) {
             val controllerInstance = controllerKClass.constructors.first().call()
@@ -46,6 +46,15 @@ class GetJson(vararg controllers: KClass<*>) {
         server.executor = null
         server.start()
         println("Server started on port $port")
+    }
+
+    fun stop() {
+        if (server != null) {
+            server?.stop(0)
+            println("Server stopped")
+        } else {
+            println("Server is not running")
+        }
     }
 
     fun match(pattern: String, actual: String): Boolean {

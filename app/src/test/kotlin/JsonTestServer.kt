@@ -1,5 +1,7 @@
 package model
 
+import Controller
+import getJson.GetJson
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.junit.jupiter.api.AfterAll
@@ -24,7 +26,7 @@ class GetJsonIntegrationTest {
         @AfterAll
         @JvmStatic
         fun teardown() {
-            server.stop() // assuming your framework supports graceful shutdown
+            server.stop()
         }
 
         private fun get(url: String): String {
@@ -42,7 +44,7 @@ class GetJsonIntegrationTest {
     @Test
     fun `GET api ints should return list of ints`() {
         val json = get("/api/ints")
-        assertEquals("[1,2,3]", json)
+        assertEquals("[1, 2, 3]", json)
     }
 
     @Test
