@@ -37,7 +37,6 @@ class GetJson(vararg controllers: KClass<*>) {
     fun start(port: Int) {
         server = HttpServer.create(InetSocketAddress(port), 0)
     
-        // Criar UM único contexto
         server!!.createContext("/") { exchange ->
             val requestPath = exchange.requestURI.path
             val matchedHandler = routes.entries.find { (pattern, _) -> match(pattern, requestPath) }?.value
@@ -55,7 +54,7 @@ class GetJson(vararg controllers: KClass<*>) {
             exchange.responseBody.use { it.write(bytes) }
         }
     
-        // Imprimir os endpoints
+        // Print the endpoints
         for ((path, _) in routes) {
             println(path)
         }
