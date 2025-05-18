@@ -35,30 +35,35 @@ class GetJson(vararg controllers: KClass<*>) {
      * @param port The port number to bind the server to.
      */
     fun start(port: Int) {
-        val server = HttpServer.create(InetSocketAddress(port), 0)
-        for ((path, handler) in routes) {
-            println(path)
-            server.createContext("/") { exchange ->
-                val requestPath = exchange.requestURI.path
-                val matchedHandler = routes.entries.find { (pattern, _) -> match(pattern, requestPath) }?.value
-
-                if (matchedHandler == null) {
-                    exchange.sendResponseHeaders(404, 0)
-                    exchange.responseBody.close()
-                    return@createContext
-                }
-
-                val response = matchedHandler.handle(exchange)
-                val bytes = response.toByteArray()
-                exchange.responseHeaders.add("Content-Type", "application/json")
-                exchange.sendResponseHeaders(200, bytes.size.toLong())
-                exchange.responseBody.use { it.write(bytes) }
+        server = HttpServer.create(InetSocketAddress(port), 0)
+    
+        // Criar UM único contexto
+        server!!.createContext("/") { exchange ->
+            val requestPath = exchange.requestURI.path
+            val matchedHandler = routes.entries.find { (pattern, _) -> match(pattern, requestPath) }?.value
+    
+            if (matchedHandler == null) {
+                exchange.sendResponseHeaders(404, 0)
+                exchange.responseBody.close()
+                return@createContext
             }
+    
+            val response = matchedHandler.handle(exchange)
+            val bytes = response.toByteArray()
+            exchange.responseHeaders.add("Content-Type", "application/json")
+            exchange.sendResponseHeaders(200, bytes.size.toLong())
+            exchange.responseBody.use { it.write(bytes) }
         }
-        server.executor = null
-        server.start()
+    
+        // Imprimir os endpoints
+        for ((path, _) in routes) {
+            println(path)
+        }
+    
+        server!!.executor = null
+        server!!.start()
         println("Server started on port $port")
-    }
+    }    
 
     /**
      * Stops the HTTP server if it is running.
