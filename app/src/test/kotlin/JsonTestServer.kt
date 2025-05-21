@@ -20,7 +20,7 @@ class GetJsonIntegrationTest {
         @JvmStatic
         fun setup() {
             server = GetJson(Controller::class)
-            server.start(8080)
+            server.start(8081)
         }
 
         @AfterAll
